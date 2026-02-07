@@ -31,7 +31,8 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var sensitivity = 0.002
 
 #nodes
-@onready var cam = $Camera3D
+@onready var pvot = $camerapvot
+@onready var cam = $camerapvot/Camera3D
 @onready var swordanim = $AnimationPlayer
 @onready var attkcd = $AttackCD
 @onready var stam_bar = $CanvasLayer/Stamina
@@ -39,6 +40,11 @@ var sensitivity = 0.002
 @onready var death_label = $CanvasLayer/deathlabel
 @onready var death_timer = $Deathtimer
 @onready var warn_label = $CanvasLayer/warninglabel
+
+# camera toggle variables
+var is_first_person = true
+var fp_pos = Vector3(0, 0, 0)
+var tp_pos = Vector3(0, 0.5, 2.0)
 
 #cooldown
 var onCooldown = false
@@ -95,10 +101,14 @@ func die():
 
 #camera axis
 func _unhandled_input(event):
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion and is_first_person:
 		rotate_y(-event.relative.x * sensitivity) 
-		cam.rotate_x(-event.relative.y * sensitivity) #this is rotating the camer on y axis 
-		cam.rotation.x = clamp(cam.rotation.x, deg_to_rad(-60), deg_to_rad(70))
+		cam.rotate_x(-event.relative.y * sensitivity)
+		cam.rotation.x = clamp(cam.rotation.x, deg_to_rad(-30), deg_to_rad(60))
+	elif event is InputEventMouseMotion and !is_first_person:
+		rotate_y(-event.relative.x * sensitivity) 
+		cam.rotate_x(-event.relative.y * sensitivity)
+		cam.rotation.x = clamp(cam.rotation.x, deg_to_rad(-20), deg_to_rad(20))
 
 #attack animations
 func attack():
@@ -109,6 +119,12 @@ func attack():
 
 func _process(delta):
 	update_health_bar()
+	
+	if Input.is_action_just_pressed("caminput"):
+		is_first_person = !is_first_person
+		
+	var target_pos = fp_pos if is_first_person else tp_pos
+	cam.transform.origin = cam.transform.origin.lerp(target_pos, delta * 10.0)
 	
 	if Input.is_action_just_pressed("quit"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
