@@ -93,8 +93,6 @@ func die():
 	
 	Input.MOUSE_MODE_VISIBLE
 
-
-
 #camera axis
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
@@ -113,7 +111,9 @@ func _process(delta):
 	update_health_bar()
 	
 	if Input.is_action_just_pressed("quit"):
-		get_tree().quit()
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+		#Input.MOUSE_MODE_VISIBLE
 		
 	attack()
 	if stam_bar:
