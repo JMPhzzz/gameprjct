@@ -9,15 +9,18 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 #camera settings
 var sensitivity = 0.002
 @onready var cam = $Camera3D
-
+#capturing mouse
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
+#camera axis
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * sensitivity) 
 		cam.rotate_x(-event.relative.y * sensitivity) #this is rotating the camer on y axis 
 		cam.rotation.x = clamp(cam.rotation.x, deg_to_rad(-60), deg_to_rad(70))
+#attack animations
+func attack():
+	
 
 func _process(delta):
 	if Input.is_action_just_pressed("quit"):
