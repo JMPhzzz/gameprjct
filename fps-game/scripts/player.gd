@@ -12,14 +12,18 @@ var current_speed = jog
 #health system
 var max_health = 100
 var health = 100
+var health_regen = 2.0
 
 #stamina system
 var max_stamina = 100.0
 var stamina = 100.0
-var stamina_drain = 30.0  # How fast it drops per second
-var stamina_regen = 15.0  # How fast it recovers per second
-var stamina_dmg = 50
+var stamina_drain = 15.0  # How fast it drops per second
+var stamina_regen = 10.0  # How fast it recovers per second
+var stamina_dmg = 10.0
 var can_sprint = true
+var stamina_jump = 5
+
+
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -34,6 +38,7 @@ var sensitivity = 0.002
 @onready var health_bar = $CanvasLayer/health
 @onready var death_label = $CanvasLayer/deathlabel
 @onready var death_timer = $Deathtimer
+@onready var warn_label = $CanvasLayer/warninglabel
 
 #cooldown
 var onCooldown = false
@@ -42,25 +47,49 @@ var onCooldown = false
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	update_health_bar()
+	death_label.visible = false
+	warn_label.visible = false
 
 #healthbar update
 func update_health_bar():
 	if health_bar:
 		health_bar.value = health
+		#health_bar.tint_progress = Color(1, 1, 1)
 
 func take_dmg(amount):
 	health -= amount
 	health = clamp(health, 0, max_health)
 	update_health_bar()
 	
-	health_bar.tint_progress = Color(1, 0, 0) # Turn red
+	#if health_bar:
+		#health_bar.value = health
+		## Turn it RED specifically when taking damage
+		#health_bar.tint_progress = Color(1, 0, 0) 
+		#
+		# Create a quick timer to turn it back to white after 0.1 seconds
+		#get_tree().create_timer(0.1).timeout.connect(func(): 
+			#health_bar.tint_progress = Color(1, 1, 1)
+		#)
+	var style = health_bar.get_theme_stylebox("fill").duplicate()
+	style.bg_color = Color(1, 0, 0) # Red
+	health_bar.add_theme_stylebox_override("fill", style)
 	
+	#var t = get_tree().create_timer(0.1)
+	#t.timeout.connect(func(): health_bar.tint_progress = Color(1, 1, 1))
+	get_tree().create_timer(0.1).timeout.connect(func():
+		var reset_style = health_bar.get_theme_stylebox("fill").duplicate()
+		reset_style.bg_color = Color(0, 0.8, 0) # Your original green
+		health_bar.add_theme_stylebox_override("fill", reset_style)
+	)
 	if health <= 0:
 		die()
 
 func die():
 	death_label.visible = true
 	death_timer.start(2.0)
+	
+	set_physics_process(false)
+	set_process(false)
 	
 	Input.MOUSE_MODE_VISIBLE
 
@@ -96,8 +125,9 @@ func _physics_process(delta):
 		velocity.y -= gravity * delta
 
 	# 2. Handle Jump
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		stamina -= stamina_jump
 	
 	
 
@@ -123,13 +153,17 @@ func _physics_process(delta):
 			target_fov = run_fov
 			
 		else:
-			current_speed = run
+			current_speed = jog
 			take_dmg(stamina_dmg * delta)
+			target_fov = jog_fov
+			warn_label.visible = true
 	
 	else:
 		current_speed = jog
 		stamina += stamina_regen * delta
+		health += health_regen * delta
 		target_fov = jog_fov
+		warn_label.visible = false
 		
 	
 	stamina = clamp(stamina, 0, max_stamina)

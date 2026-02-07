@@ -88,7 +88,6 @@ libraries/ = SubResource("AnimationLibrary_dqkch")
 [node name="Deathtimer" type="Timer" parent="." unique_id=1430920882]
 
 [node name="AttackCD" type="Timer" parent="." unique_id=455310632]
-wait_time = 0.5
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1708518666]
 
@@ -127,16 +126,8 @@ offset_left = 959.0
 offset_top = 612.0
 offset_right = 1035.0
 offset_bottom = 635.0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "STAMINA:"
-
-[node name="healthlabel" type="Label" parent="CanvasLayer" unique_id=985725851]
-offset_left = 967.0
-offset_top = 566.0
-offset_right = 1043.0
-offset_bottom = 589.0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-text = "HEALTH:"
 
 [node name="deathlabel" type="Label" parent="CanvasLayer" unique_id=2114904211]
 offset_left = 228.0
@@ -146,14 +137,6 @@ offset_bottom = 363.0
 theme_override_font_sizes/font_size = 90
 text = "YOU ARE DIED!!"
 vertical_alignment = 1
-
-[node name="warninglabel" type="Label" parent="CanvasLayer" unique_id=450907002]
-offset_left = 230.0
-offset_top = 577.0
-offset_right = 908.0
-offset_bottom = 619.0
-theme_override_font_sizes/font_size = 30
-text = "YOUR STAMINA IS LOW STOP PRESSING SPRINT!!!"
 
 [connection signal="timeout" from="Deathtimer" to="." method="_on_deathtimer_timeout"]
 [connection signal="timeout" from="AttackCD" to="." method="_on_attack_cd_timeout"]
