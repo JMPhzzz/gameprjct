@@ -53,7 +53,7 @@ var sensitivity = 0.002
 @onready var swordtp = $swordtp
 
 # camera toggle variables
-var is_first_person = true
+var is_first_person = false
 var fp_length = 0.0
 var tp_length = 2.5
 
