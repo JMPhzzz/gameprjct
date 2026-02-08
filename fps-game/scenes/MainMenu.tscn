@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://chferevr1tejp"]
 
 [ext_resource type="Script" uid="uid://3al5sv4kwokd" path="res://scripts/mainmenu.gd" id="1_yqorp"]
+[ext_resource type="AudioStream" uid="uid://csirdohirxekj" path="res://assets/Audio/Ambiance.wav" id="2_0ykhv"]
 
 [node name="MainMenu" type="Node3D" unique_id=654916473]
 script = ExtResource("1_yqorp")
@@ -48,6 +49,9 @@ text = "OPTION(UNDER DEVELOPMENT)"
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "QUIT"
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=336375504]
+stream = ExtResource("2_0ykhv")
 
 [connection signal="pressed" from="ButtonVBox/start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="ButtonVBox/options" to="." method="_on_options_pressed"]

@@ -48,12 +48,16 @@ var sensitivity = 0.002
 @onready var charanim = $YBot/AnimationPlayer
 @onready var crosshair = $CanvasLayer/crosshair
 
+#soundfx
+@onready var swordfp = $swordfp
+@onready var swordtp = $swordtp
+
 # camera toggle variables
 var is_first_person = true
 var fp_length = 0.0
 var tp_length = 2.5
 
-#cooldown
+#cooldown etc
 var onCooldown = false
 var is_attacking = false
 
@@ -143,16 +147,18 @@ func _unhandled_input(event):
 
 #attack animations
 func attack():
-	if Input.is_action_just_pressed("attack") and onCooldown == false and is_attacking == false:
+	if Input.is_action_just_pressed("attack") and is_on_floor() and onCooldown == false and is_attacking == false:
 		onCooldown = true
 		is_attacking = true
 		
 		stamina -= stamina_attack
 		
 		swordanim.play("swordswing")
+		swordfp.play()
 		
 		if !is_first_person:
 			charanim.play("swordslash")
+			swordtp.play()
 		
 		attkcd.start()
 
@@ -161,6 +167,7 @@ func _process(delta):
 	update_sword_parent()
 	
 	$YBot.position = Vector3.ZERO
+	
 	
 	if Input.is_action_just_pressed("caminput"):
 		is_first_person = !is_first_person
@@ -219,6 +226,7 @@ func update_sword_parent():
 		crosshair.visible = is_first_person
 
 func _physics_process(delta):
+	
 	# 1. Add Gravity
 	if not is_on_floor():
 		velocity.y -= gravity * delta
@@ -239,6 +247,7 @@ func _physics_process(delta):
 	
 	var is_sprinting = Input.is_action_pressed("sprint") and is_on_floor() and velocity.length() > 0.5 and direction.length() > 0
 		
+	
 	#if is_sprinting > 0 and can_sprint:
 		#current_speed = run
 		#stamina -= stamina_drain * delta
