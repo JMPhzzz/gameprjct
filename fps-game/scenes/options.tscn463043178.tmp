@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cp3mqudsbm4r2"]
+
+[ext_resource type="Script" uid="uid://bitwnxp078okw" path="res://scripts/options.gd" id="1_c2u1v"]
+[ext_resource type="PackedScene" uid="uid://chferevr1tejp" path="res://scenes/MainMenu.tscn" id="2_yjkok"]
+
+[node name="options" type="Node3D" unique_id=1173658120]
+script = ExtResource("1_c2u1v")
+menu = ExtResource("2_yjkok")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1794029123]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.46666667, 0.42745098, 0.1254902, 1)
+
+[node name="Label" type="Label" parent="." unique_id=732069727]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 70
+text = "THIS OPTIONS MENU 
+IS
+ UNDER DEVELOPMENT  SORRY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1045095142]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="back" type="Button" parent="VBoxContainer" unique_id=1814199058]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "< BACK TO MENU"
+
+[connection signal="pressed" from="VBoxContainer/back" to="." method="_on_back_pressed"]
