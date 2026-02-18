@@ -321,6 +321,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.022686, 0)
 shape = SubResource("CapsuleShape3D_smehm")
 
 [node name="Swordpointh" type="Node3D" parent="." unique_id=556504788]
+visible = false
 
 [node name="Sword" parent="Swordpointh" unique_id=1100372741 instance=ExtResource("2_g2els")]
 transform = Transform3D(-7.631078e-08, -1.8773525e-08, 0.9999999, 0.91974574, -0.3925135, 6.28177e-08, 0.3925135, 0.91974574, 4.7219924e-08, 0.29964885, 1.0306033, -0.6646994)
